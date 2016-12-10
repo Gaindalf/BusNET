@@ -7,8 +7,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class AppController {
     @RequestMapping("/")
-    public String hello(Model model){
+    public String hello(Model model) {
         model.addAttribute("hello", "Hello World");
         return "hello";
+    }
+
+    @RequestMapping("/confidential/page")
+    public String secure(Model model){
+        model.addAttribute("secure", "Secure page");
+        return "secure";
     }
 }
