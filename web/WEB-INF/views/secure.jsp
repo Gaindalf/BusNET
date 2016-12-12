@@ -4,6 +4,6 @@
     <title>Secure Page</title>
 </head>
 <body>
-${secure}
+Вы зашли как ${secure}
 </body>
 </html>
