@@ -22,6 +22,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        auth.inMemoryAuthentication().withUser("admin1").password("admin1").roles("ADMIN");
     }
 
     @Bean(name = "passwordEncoder")
@@ -36,8 +37,10 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().formLogin().defaultSuccessUrl("/", false)
                 .defaultSuccessUrl("/", false)
                 .and().csrf().disable()
-//                .sessionManagement().maximumSessions(1).sessionRegistry(sessionRegistry()).and().and()
-                .logout().invalidateHttpSession(true).deleteCookies();
+//                .sessionManagement().maximumSessions(1).sessionRegistry(sessionRegistry())
+//                .and()
+//                .and()
+                .logout().logoutSuccessUrl("/").invalidateHttpSession(true).deleteCookies();
     }
 
     @Bean

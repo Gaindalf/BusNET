@@ -5,5 +5,9 @@
 </head>
 <body>
 Вы зашли как ${secure}
+<br>
+${secure1}
+<br>
+<a href="/logout">Выход</a>
 </body>
 </html>

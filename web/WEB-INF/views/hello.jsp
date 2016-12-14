@@ -1,16 +1,22 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Aleksandr
-  Date: 10.12.2016
-  Time: 16:00
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/WEB-INF/views/uncludes.jsp"%>
 <html>
 <head>
     <title> Hello World</title>
 </head>
 <body>
-${hello}
+Добро пожаловть${Name}<br>
+<a href="/logout">${Exit}</a>
+<a href="/reg">${Registration}</a>
+${Enter}
+
+<table border="1">
+    <th>Name</th>
+    <c:forEach items="${usersList}" var="users">
+        <tr>
+            <td>${users.name}</td>
+        </tr>
+    </c:forEach>
+</table>
 </body>
 </html>

@@ -14,6 +14,7 @@ import java.util.Map;
 
 @Controller
 public class ScheduleController {
+
     @Autowired
     private ScheduleService scheduleService;
 
