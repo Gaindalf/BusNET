@@ -18,18 +18,18 @@ public class ScheduleController {
     @Autowired
     private ScheduleService scheduleService;
 
-    @RequestMapping("/index")
-    public String setupForm(Map<String, Object> map){
+    @RequestMapping("/schedule/bus")
+    public String setupForm(Map<String, Object> map) {
         Schedule schedule = new Schedule();
         map.put("schedule", schedule);
         map.put("scheduleList", scheduleService.getAllSchedule());
         return "schedule";
     }
 
-    @RequestMapping(value = "/schedule.do", method = RequestMethod.POST)
-    public String doActions(@ModelAttribute Schedule schedule, BindingResult result, @RequestParam String action, Map<String, Object> map){
+    @RequestMapping(value = "/schedule/schedule.do", method = RequestMethod.POST)
+    public String doActions(@ModelAttribute Schedule schedule, BindingResult result, @RequestParam String action, Map<String, Object> map) {
         Schedule scheduleResult = new Schedule();
-        switch (action.toLowerCase()){
+        switch (action.toLowerCase()) {
             case "add":
                 scheduleService.add(schedule);
                 scheduleResult = schedule;
@@ -43,13 +43,14 @@ public class ScheduleController {
                 scheduleResult = new Schedule();
                 break;
             case "search":
-                Schedule searchedSchedule =  scheduleService.getSchedule(schedule.getId());
+                Schedule searchedSchedule = scheduleService.getSchedule(schedule.getId());
                 scheduleResult = searchedSchedule != null ? searchedSchedule : new Schedule();
                 break;
         }
 
         map.put("schedule", scheduleResult);
         map.put("scheduleList", scheduleService.getAllSchedule());
+        map.put("scheduleList2", scheduleService.getAllSchedule());
         return "schedule";
     }
 }

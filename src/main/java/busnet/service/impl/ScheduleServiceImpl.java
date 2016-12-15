@@ -38,4 +38,6 @@ public class ScheduleServiceImpl implements ScheduleService{
     public List getAllSchedule() {
         return scheduleDao.getAllSchedule();
     }
+
+
 }

@@ -30,7 +30,7 @@ public class RegistrationController {
     public String doActions(@ModelAttribute Users users, BindingResult result, @RequestParam String action, Map<String, Object> map) {
         Users usersResult = new Users();
         switch (action.toLowerCase()) {
-            case "add":
+            case "зарегистрироваться":
                 registrationService.add(users);
                 usersResult = users;
                 break;

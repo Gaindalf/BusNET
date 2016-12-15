@@ -21,16 +21,16 @@
             <td><form:input path="mail" /></td>
         </tr>
         <tr>
-            <td>Имя (Оно будет отображаться в строке статуса):</td>
+            <td>Имя:</td>
             <td><form:input path="name" /></td>
         </tr>
         <tr>
-            <td>телефон:</td>
+            <td>Телефон:</td>
             <td><form:input path="phone" /></td>
         </tr>
         <tr>
             <td colspan="2">
-                <input type="submit" name="action" value="Add" />
+                <input type="submit" name="action" value="Зарегистрироваться">
             </td>
         </tr>
     </table>

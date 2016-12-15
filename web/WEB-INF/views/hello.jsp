@@ -5,18 +5,10 @@
     <title> Hello World</title>
 </head>
 <body>
-Добро пожаловть${Name}<br>
+Добро пожаловть${Login}<br>
 <a href="/logout">${Exit}</a>
 <a href="/reg">${Registration}</a>
 ${Enter}
-
-<table border="1">
-    <th>Name</th>
-    <c:forEach items="${usersList}" var="users">
-        <tr>
-            <td>${users.name}</td>
-        </tr>
-    </c:forEach>
-</table>
+${Schedule}
 </body>
 </html>

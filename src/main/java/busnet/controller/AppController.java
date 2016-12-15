@@ -17,19 +17,19 @@ public class AppController {
     @Autowired
     private RegistrationService registrationService;
 
-
     @RequestMapping("/")
     public String hello(Model model) {
         if(SecurityContextHolder.getContext().getAuthentication().getName().toString() != "anonymousUser") {
-            model.addAttribute("Name", ", " + SecurityContextHolder.getContext().getAuthentication().getName() + ".");
+            model.addAttribute("Login", ", " + SecurityContextHolder.getContext().getAuthentication().getName() + ".");
             model.addAttribute("Exit", "Выход");
-            model.addAttribute("usersList", registrationService.getUsername());
+//            model.addAttribute("Name", registrationService.getUserName(SecurityContextHolder.getContext().getAuthentication().getName().toString()).toString());
 
         } else{
-            model.addAttribute("Name", ", Гость.");
+            model.addAttribute("Login", ", Гость.");
             model.addAttribute("Registration", "Регистрация");
             model.addAttribute("Enter", "<a href=\"/login\">Войти<a/>");
         }
+        model.addAttribute("Schedule", "Расписание");
         return "hello";
     }
 

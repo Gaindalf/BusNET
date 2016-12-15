@@ -40,7 +40,8 @@ public class RegistrationServiceImpl implements RegistrationService{
         return registrationDao.getAllUsers();
     }
 
-//    public String getUserName() {
-//        return registrationDao.getUserName();
-//    }
+    @Transactional
+    public String getUserName(String name) {
+        return  registrationDao.getUserName(name);
+    }
 }

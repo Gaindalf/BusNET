@@ -40,7 +40,8 @@ public class RegistrationDaoImpl implements RegistrationDao{
         return session.getCurrentSession().createQuery("FROM Users").list();
     }
 
-//    public String getUserName() {
-//        return session.getCurrentSession().createQuery("SELECT Name FROM Users WHERE ").toString();
-//    }
+    public String getUserName(String name) {
+        String queryFromDB = "SELECT name FROM users WHERE login = '" + name + "'";
+        return session.getCurrentSession().createQuery(queryFromDB).toString();
+    }
 }

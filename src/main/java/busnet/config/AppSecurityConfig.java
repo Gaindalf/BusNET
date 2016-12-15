@@ -34,7 +34,9 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/confidential/**").access("hasRole('ADMIN')")
-                .and().formLogin().defaultSuccessUrl("/", false)
+                .antMatchers("/schedule/**").access("hasRole('ADMIN')")
+                .antMatchers("/schedule/**").access("hasRole('USER')")
+                .and().formLogin().loginPage("/login").permitAll()
                 .defaultSuccessUrl("/", false)
                 .and().csrf().disable()
 //                .sessionManagement().maximumSessions(1).sessionRegistry(sessionRegistry())

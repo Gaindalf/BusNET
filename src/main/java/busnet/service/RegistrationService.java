@@ -10,4 +10,5 @@ public interface RegistrationService {
     public void delete(int id);
     public Users getUser(int id);
     public List getAllUsers();
+    public String getUserName(String name);
 }

@@ -5,7 +5,6 @@ import busnet.entity.Schedule;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Repository
@@ -38,4 +37,5 @@ public class ScheduleDaoImpl implements ScheduleDao{
     public List getAllSchedule() {
         return session.getCurrentSession().createQuery("FROM Schedule").list();
     }
+
 }
