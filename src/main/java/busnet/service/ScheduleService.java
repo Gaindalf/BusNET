@@ -10,4 +10,8 @@ public interface ScheduleService {
     public void delete(int id);
     public Schedule getSchedule(int id);
     public List getAllSchedule();
+    public List<Schedule> getAll();
+    public Schedule getById(Integer id);
+    public List<Schedule> getAllByStation(String station);
+    public List<Schedule> getAllStation();
 }

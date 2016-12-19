@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class ScheduleServiceImpl implements ScheduleService{
+public class ScheduleServiceImpl implements ScheduleService {
     @Autowired
     private ScheduleDao scheduleDao;
 
@@ -37,6 +37,26 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Transactional
     public List getAllSchedule() {
         return scheduleDao.getAllSchedule();
+    }
+
+    @Transactional
+    public List<Schedule> getAll() {
+        return scheduleDao.getAll();
+    }
+
+    @Transactional
+    public Schedule getById(Integer id) {
+        return scheduleDao.getById(id);
+    }
+
+    @Transactional
+    public List<Schedule> getAllByStation(String station) {
+        return scheduleDao.getAllByStation(station);
+    }
+
+    @Transactional
+    public List<Schedule> getAllStation(){
+        return scheduleDao.getAllStation();
     }
 
 

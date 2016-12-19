@@ -9,6 +9,6 @@
 <a href="/logout">${Exit}</a>
 <a href="/reg">${Registration}</a>
 ${Enter}
-${Schedule}
+<a href="schedule/bus">${Schedule}</a>
 </body>
 </html>

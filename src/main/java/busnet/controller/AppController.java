@@ -52,27 +52,4 @@ public class AppController {
     public String login() {
         return "login";
     }
-
-//    @RequestMapping(value="/logout", method = RequestMethod.GET)
-//    public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if (auth != null){
-//            new SecurityContextLogoutHandler().logout(request, response, auth);
-//        }
-//        return "redirect:/login?logout";//You can redirect wherever you want, but generally it's a good practice to show login screen again.
-//    }
-
-//    @RequestMapping("/insert")
-//    public String insert(Model model) {
-//
-//        return "register";
-//    }
-
-//    @RequestMapping(value = "/station/new", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-//    @ResponseBody
-//    public String addNewStation(String json) {
-//        Station sender = new Station();
-//        sender.setStationName(SecurityContextHolder.getContext().getAuthentication().getName());
-//        return "hello";
-//    }
 }

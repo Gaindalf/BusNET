@@ -7,6 +7,7 @@
 <body>
 <h1>Schedule</h1><br>
 <a href="/logout">Выйти</a><br>
+${schedule2}
 <form:form action="/schedule/schedule.do" method="POST" commandName="schedule">
     <table>
         <tr>
@@ -15,11 +16,11 @@
         </tr>
         <tr>
             <td>Station Name</td>
-            <td><form:input path="stationId"/></td>
+            <td><form:input path="station"/></td>
         </tr>
         <tr>
             <td>Bus Number</td>
-            <td><form:input path="busNumber"/></td>
+            <td><form:input path="line"/></td>
         </tr>
         <tr>
             <td>Time</td>
@@ -44,29 +45,50 @@
     <c:forEach items="${scheduleList}" var="schedule">
         <tr>
             <td>${schedule.id}</td>
-            <td>${schedule.stationId}</td>
-            <td>${schedule.busNumber}</td>
+            <td>${schedule.station}</td>
+            <td>${schedule.line}</td>
             <td>${schedule.time}</td>
         </tr>
     </c:forEach>
 </table>
 <table border="1">
-    <th>Id</th>
-    <th>Station Name</th>
-    <th>Bus Number</th>
+    <th>station</th>
     <th>Time</th>
-    <c:forEach items="${scheduleList}" var="schedule">
+    <c:forEach items="${scheduleList2}" var="schedule">
         <tr>
-            <c:if test="${schedule.busNumber == 1}">
-            <div>
-                <td>${schedule.id}</td>
-                <td>${schedule.stationId}</td>
-                <td>${schedule.busNumber}</td>
-                <td>${schedule.time}</td>
-            </div>
-            </c:if>
+            <td>${schedule.station}</td>
+            <td>${schedule.time}</td>
         </tr>
     </c:forEach>
 </table>
+<table border="1">
+    <th>station</th>
+    <c:forEach items="${stationList}" var="stations">
+        <tr>
+            <td>${stations.name}</td>
+        </tr>
+    </c:forEach>
+</table>
+<br>
+Станция Отправления:<br>
+<select name="station">
+    <option value="Sloane Square">Sloane Square</option>
+    <option value="St. James's Park">St. James's Park</option>
+    <option value="Westminster">Westminster</option>
+    <option value="Waterloo">Waterloo</option>
+    <option value="Southwark">Southwark</option>
+    <option value="London Bridge Station">London Bridge Station</option>
+</select>
+<br>
+Станция Назначения:<br>
+<select name="station">
+    <c:forEach items="${stationList}" var="stations">
+        <option value="${stations.name}">${stations.name}</option>
+    </c:forEach>
+</select>
+<br>
+<form:form action="/schedule/station.do" method="POST" commandName="schedule">
+    <input type="submit" name="action" value="Поиск"/>
+</form:form>
 </body>
 </html>

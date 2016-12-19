@@ -2,6 +2,7 @@ package busnet.controller;
 
 import busnet.entity.Schedule;
 import busnet.service.ScheduleService;
+import busnet.service.StationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -18,11 +19,18 @@ public class ScheduleController {
     @Autowired
     private ScheduleService scheduleService;
 
+    @Autowired
+    private StationService stationService;
+
     @RequestMapping("/schedule/bus")
     public String setupForm(Map<String, Object> map) {
         Schedule schedule = new Schedule();
         map.put("schedule", schedule);
         map.put("scheduleList", scheduleService.getAllSchedule());
+        map.put("scheduleList2", scheduleService.getAllByStation("St. James's Park"));
+//        map.put("scheduleList3", scheduleService.getAllByStation("St. James's Park"));
+        map.put("stationList", stationService.getAllStations());
+
         return "schedule";
     }
 
@@ -50,7 +58,8 @@ public class ScheduleController {
 
         map.put("schedule", scheduleResult);
         map.put("scheduleList", scheduleService.getAllSchedule());
-        map.put("scheduleList2", scheduleService.getAllSchedule());
+        map.put("scheduleList2", scheduleService.getAllByStation("St. James's Park"));
+        map.put("scheduleList3", scheduleService.getAllByStation("St. James's Park"));
         return "schedule";
     }
 }

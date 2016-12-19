@@ -10,24 +10,34 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Column(name = "station_id")
-    private String stationId;
+    @Column
+    private String station;
 
-    @Column(name = "bus_number")
-    private String busNumber;
+    @Column
+    private String line;
 
     @Column
     private String time;
 
+    @Column
+    private String transferstation;
+
+    @Column
+    private int stationnumber;
+
     public Schedule() {
     }
 
-    public Schedule(int id, String stationId, String busNumber, String time) {
+    public Schedule(int id, String station, String line, String time, String transferstation, int stationnumber) {
         this.id = id;
-        this.stationId = stationId;
-        this.busNumber = busNumber;
+        this.station = station;
+        this.line = line;
         this.time = time;
+        this.transferstation = transferstation;
+        this.stationnumber = stationnumber;
     }
+
+
 
     public int getId() {
         return id;
@@ -37,20 +47,20 @@ public class Schedule {
         this.id = id;
     }
 
-    public String getStationId() {
-        return stationId;
+    public String getStation() {
+        return station;
     }
 
-    public void setStationId(String stationId) {
-        this.stationId = stationId;
+    public void setStation(String station) {
+        this.station = station;
     }
 
-    public String getBusNumber() {
-        return busNumber;
+    public String getLine() {
+        return line;
     }
 
-    public void setBusNumber(String busNumber) {
-        this.busNumber = busNumber;
+    public void setLine(String line) {
+        this.line = line;
     }
 
     public String getTime() {
@@ -59,5 +69,21 @@ public class Schedule {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getTransferstation() {
+        return transferstation;
+    }
+
+    public void setTransferstation(String transferstation) {
+        this.transferstation = transferstation;
+    }
+
+    public int getStationnumber() {
+        return stationnumber;
+    }
+
+    public void setStationnumber(int stationnumber) {
+        this.stationnumber = stationnumber;
     }
 }
