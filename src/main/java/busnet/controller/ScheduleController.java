@@ -1,6 +1,7 @@
 package busnet.controller;
 
 import busnet.entity.Schedule;
+import busnet.entity.Stations;
 import busnet.service.ScheduleService;
 import busnet.service.StationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,6 @@ public class ScheduleController {
         map.put("schedule", schedule);
         map.put("scheduleList", scheduleService.getAllSchedule());
         map.put("scheduleList2", scheduleService.getAllByStation("St. James's Park"));
-//        map.put("scheduleList3", scheduleService.getAllByStation("St. James's Park"));
         map.put("stationList", stationService.getAllStations());
 
         return "schedule";
@@ -59,7 +59,43 @@ public class ScheduleController {
         map.put("schedule", scheduleResult);
         map.put("scheduleList", scheduleService.getAllSchedule());
         map.put("scheduleList2", scheduleService.getAllByStation("St. James's Park"));
-        map.put("scheduleList3", scheduleService.getAllByStation("St. James's Park"));
         return "schedule";
+    }
+
+    @RequestMapping("/station")
+    public String station(Map<String, Object> map) {
+        Stations stations = new Stations();
+        map.put("station", stations);
+        map.put("stationList", stationService.getAllStationWithId());
+
+        return "station";
+    }
+
+    @RequestMapping(value = "station.do", method = RequestMethod.POST)
+    public String doActions(@ModelAttribute Stations stations, BindingResult result, @RequestParam String action, Map<String, Object> map) {
+        Stations stationResult = new Stations();
+        switch (action.toLowerCase()) {
+            case "Search":
+                Stations searchedStation = stationService.getName(stations.getName());
+                stationResult = searchedStation != null ? searchedStation : new Stations();
+                break;
+        }
+        map.put("stations", stations);
+        map.put("nameofstation", stationResult);
+        map.put("stationList", stationService.getAllStationWithId());
+        return "station";
+    }
+
+    @RequestMapping(value = "stationFrom.do", method = RequestMethod.GET)
+    public String whowStation(@RequestParam String name, Map<String, Object> map){
+        String[] splitNames = name.split(",");
+        Stations stations = new Stations();
+        System.out.println(splitNames[0]);
+        System.out.println(splitNames[1]);
+        map.put("station", stations);
+        map.put("nameOfTheDepartureStation", splitNames[0]);
+        map.put("nameOfTheDestinationStation", splitNames[1]);
+        map.put("stationList", stationService.getAllStationWithId());
+        return "station";
     }
 }

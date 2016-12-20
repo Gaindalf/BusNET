@@ -7,7 +7,6 @@
 <body>
 <h1>Schedule</h1><br>
 <a href="/logout">Выйти</a><br>
-${schedule2}
 <form:form action="/schedule/schedule.do" method="POST" commandName="schedule">
     <table>
         <tr>
@@ -61,34 +60,6 @@ ${schedule2}
         </tr>
     </c:forEach>
 </table>
-<table border="1">
-    <th>station</th>
-    <c:forEach items="${stationList}" var="stations">
-        <tr>
-            <td>${stations.name}</td>
-        </tr>
-    </c:forEach>
-</table>
 <br>
-Станция Отправления:<br>
-<select name="station">
-    <option value="Sloane Square">Sloane Square</option>
-    <option value="St. James's Park">St. James's Park</option>
-    <option value="Westminster">Westminster</option>
-    <option value="Waterloo">Waterloo</option>
-    <option value="Southwark">Southwark</option>
-    <option value="London Bridge Station">London Bridge Station</option>
-</select>
-<br>
-Станция Назначения:<br>
-<select name="station">
-    <c:forEach items="${stationList}" var="stations">
-        <option value="${stations.name}">${stations.name}</option>
-    </c:forEach>
-</select>
-<br>
-<form:form action="/schedule/station.do" method="POST" commandName="schedule">
-    <input type="submit" name="action" value="Поиск"/>
-</form:form>
 </body>
 </html>

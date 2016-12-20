@@ -10,5 +10,6 @@
 <a href="/reg">${Registration}</a>
 ${Enter}
 <a href="schedule/bus">${Schedule}</a>
+<a href="station">Станции</a>
 </body>
 </html>
