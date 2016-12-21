@@ -42,4 +42,5 @@ public class AppConfig {
         jdbcTemplate.setDataSource(dataSource());
         return jdbcTemplate;
     }
+
 }

@@ -6,6 +6,7 @@ import busnet.service.ScheduleService;
 import busnet.service.StationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -87,7 +88,7 @@ public class ScheduleController {
     }
 
     @RequestMapping(value = "stationFrom.do", method = RequestMethod.GET)
-    public String whowStation(@RequestParam String name, Map<String, Object> map){
+    public String whowStation(@RequestParam String name, Map<String, Object> map) {
         String[] splitNames = name.split(",");
         Stations stations = new Stations();
         System.out.println(splitNames[0]);
@@ -97,5 +98,19 @@ public class ScheduleController {
         map.put("nameOfTheDestinationStation", splitNames[1]);
         map.put("stationList", stationService.getAllStationWithId());
         return "station";
+    }
+
+    @RequestMapping("/create")
+    public String create(Model model) throws Exception {
+//        stationService.inputValues();
+//        Stations stations = new Stations();
+        stationService.add(new Stations(1, "Sloane Square"));
+        stationService.add(new Stations(2, "St. James's Park"));
+        stationService.add(new Stations(3, "Westminster"));
+        stationService.add(new Stations(4, "Waterloo"));
+        stationService.add(new Stations(5, "Southwark"));
+        stationService.add(new Stations(6, "London Bridge Station"));
+        model.addAttribute("Hello", "Hello");
+        return "create";
     }
 }
