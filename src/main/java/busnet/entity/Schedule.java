@@ -20,24 +20,26 @@ public class Schedule {
     private String time;
 
     @Column
-    private String transferstation;
+    private int stationnumber;
 
     @Column
-    private int stationnumber;
+    private boolean direction;
 
     public Schedule() {
     }
 
-    public Schedule(int id, String station, String line, String time, String transferstation, int stationnumber) {
+    public Schedule(int id, String line, String station, String time, int stationnumber, boolean direction) {
         this.id = id;
-        this.station = station;
         this.line = line;
+        this.station = station;
         this.time = time;
-        this.transferstation = transferstation;
         this.stationnumber = stationnumber;
+        this.direction = direction;
     }
 
-
+    public Schedule(int stationnumber) {
+        this.stationnumber = stationnumber;
+    }
 
     public int getId() {
         return id;
@@ -55,14 +57,6 @@ public class Schedule {
         this.station = station;
     }
 
-    public String getLine() {
-        return line;
-    }
-
-    public void setLine(String line) {
-        this.line = line;
-    }
-
     public String getTime() {
         return time;
     }
@@ -71,19 +65,27 @@ public class Schedule {
         this.time = time;
     }
 
-    public String getTransferstation() {
-        return transferstation;
-    }
-
-    public void setTransferstation(String transferstation) {
-        this.transferstation = transferstation;
-    }
-
     public int getStationnumber() {
         return stationnumber;
     }
 
     public void setStationnumber(int stationnumber) {
         this.stationnumber = stationnumber;
+    }
+
+    public String getLine() {
+        return line;
+    }
+
+    public void setLine(String line) {
+        this.line = line;
+    }
+
+    public boolean isDirection() {
+        return direction;
+    }
+
+    public void setDirection(boolean direction) {
+        this.direction = direction;
     }
 }

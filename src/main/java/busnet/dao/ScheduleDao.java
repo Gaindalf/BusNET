@@ -14,5 +14,10 @@ public interface ScheduleDao {
     public List<Schedule> getAll();
     public List<Schedule> getAllByStation(String station);
     public List<Schedule> getAllStation();
+    public List<Schedule> getAllByOne();
+    public List<Schedule> getDirectionByStation(String station);
+    public Schedule getIdByName(String station);
+    public int getStationNumber(String station);
+    public List getStationByStationAndDirection(int a, int b, boolean direction);
 
 }

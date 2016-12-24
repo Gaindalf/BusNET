@@ -69,35 +69,5 @@ public class HibernateConfig {
         return new PersistenceExceptionTranslationPostProcessor();
     }
 
-//    @Bean
-//    public AbstractCRUD<WeatherReport> weatherReportCRUD() {
-//        return new WeatherReportUnils(sessionFactory().getObject());
-//    }
-//
-//    @Bean(name = "picturesUtils")
-//    public AbstractCRUD<Picture> pictureAbstractCRUD() {
-//        return new PictureUtils(sessionFactory().getObject());
-//    }
-//
-//    @Bean
-//    public AbstractRegistrySearcher<Chat, User> chatCRUD(){
-//        return new ChatUtils(sessionFactory().getObject());
-//    }
-//
-//    @Bean
-//    public AbstractCRUD<Message> dataUtilMessages(){
-//        return new MessageUtils(sessionFactory().getObject());
-//    }
-//
-//    @Bean
-//    public AbstractCRUD<ChatRegistryUnit> registryCRUD() {
-//        return new RegistryUtils(sessionFactory().getObject());
-//    }
-//
-//    @Bean
-//    public AbstractCRUD<User> userCRUD() {
-//        return new UserCRUD(sessionFactory().getObject());
-//    }
-
 }
 

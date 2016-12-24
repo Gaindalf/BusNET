@@ -14,4 +14,9 @@ public interface ScheduleService {
     public Schedule getById(Integer id);
     public List<Schedule> getAllByStation(String station);
     public List<Schedule> getAllStation();
+    public List<Schedule> getAllByOne();
+    public List<Schedule> getDirectionByStation(String station);
+    public Schedule getIdByName(String stationnu);
+    public int getStationNumber(String station);
+    public List getStationByStationAndDirection(int a, int b, boolean direction);
 }

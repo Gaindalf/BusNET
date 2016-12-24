@@ -7,7 +7,8 @@
 <body>
 <h1>Schedule</h1><br>
 <a href="/logout">Выйти</a><br>
-<form:form action="/schedule/schedule.do" method="POST" commandName="schedule">
+<a href="/">На главную</a><br>
+<form:form action="/schedule.do" method="POST" commandName="schedule">
     <table>
         <tr>
             <td>Id</td>
@@ -26,6 +27,14 @@
             <td><form:input path="time"/></td>
         </tr>
         <tr>
+            <td>Station number</td>
+            <td><form:input path="stationnumber"/></td>
+        </tr>
+        <tr>
+            <td>Direction</td>
+            <td><form:input path="direction"/></td>
+        </tr>
+        <tr>
             <td colspan="2">
                 <input type="submit" name="action" value="Add"/>
                 <input type="submit" name="action" value="Edit"/>
@@ -41,12 +50,16 @@
     <th>Station Name</th>
     <th>Bus Number</th>
     <th>Time</th>
+    <th>Station number</th>
+    <th>Direction</th>
     <c:forEach items="${scheduleList}" var="schedule">
         <tr>
             <td>${schedule.id}</td>
-            <td>${schedule.station}</td>
             <td>${schedule.line}</td>
+            <td>${schedule.station}</td>
             <td>${schedule.time}</td>
+            <td>${schedule.stationnumber}</td>
+            <td>${schedule.direction}</td>
         </tr>
     </c:forEach>
 </table>

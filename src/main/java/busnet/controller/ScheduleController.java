@@ -1,7 +1,9 @@
 package busnet.controller;
 
+import busnet.entity.Roles;
 import busnet.entity.Schedule;
 import busnet.entity.Stations;
+import busnet.service.RolesService;
 import busnet.service.ScheduleService;
 import busnet.service.StationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,10 @@ public class ScheduleController {
     @Autowired
     private StationService stationService;
 
-    @RequestMapping("/schedule/bus")
+    @Autowired
+    private RolesService rolesService;
+
+    @RequestMapping("/schedule")
     public String setupForm(Map<String, Object> map) {
         Schedule schedule = new Schedule();
         map.put("schedule", schedule);
@@ -35,7 +40,7 @@ public class ScheduleController {
         return "schedule";
     }
 
-    @RequestMapping(value = "/schedule/schedule.do", method = RequestMethod.POST)
+    @RequestMapping(value = "/schedule.do", method = RequestMethod.POST)
     public String doActions(@ModelAttribute Schedule schedule, BindingResult result, @RequestParam String action, Map<String, Object> map) {
         Schedule scheduleResult = new Schedule();
         switch (action.toLowerCase()) {
@@ -67,23 +72,9 @@ public class ScheduleController {
     public String station(Map<String, Object> map) {
         Stations stations = new Stations();
         map.put("station", stations);
+//        map.put("stationList", scheduleService.getAllByOne());
         map.put("stationList", stationService.getAllStationWithId());
 
-        return "station";
-    }
-
-    @RequestMapping(value = "station.do", method = RequestMethod.POST)
-    public String doActions(@ModelAttribute Stations stations, BindingResult result, @RequestParam String action, Map<String, Object> map) {
-        Stations stationResult = new Stations();
-        switch (action.toLowerCase()) {
-            case "Search":
-                Stations searchedStation = stationService.getName(stations.getName());
-                stationResult = searchedStation != null ? searchedStation : new Stations();
-                break;
-        }
-        map.put("stations", stations);
-        map.put("nameofstation", stationResult);
-        map.put("stationList", stationService.getAllStationWithId());
         return "station";
     }
 
@@ -93,24 +84,54 @@ public class ScheduleController {
         Stations stations = new Stations();
         System.out.println(splitNames[0]);
         System.out.println(splitNames[1]);
+        System.out.println(scheduleService.getStationNumber(splitNames[0]));
+        System.out.println(scheduleService.getStationNumber(splitNames[1]));
+        int a = scheduleService.getStationNumber(splitNames[0]);
+        int b = scheduleService.getStationNumber(splitNames[1]);
+        if(a < b){
+            map.put("Message", "Маршрут:");
+            map.put("directionList", scheduleService.getStationByStationAndDirection(a, b, true));
+        } else if (a > b){
+            map.put("Message", "Маршрут:");
+            map.put("directionList", scheduleService.getStationByStationAndDirection(b, a, false));
+        }else{
+            map.put("Message", "Вы выбрали одинаковые станции");
+        }
         map.put("station", stations);
         map.put("nameOfTheDepartureStation", splitNames[0]);
+        map.put("scheduleList3", scheduleService.getAllByStation(splitNames[0]));
+        map.put("scheduleList4", scheduleService.getAllByStation(splitNames[1]));
+//        map.put("stationscheduleList", stationService.getStations())
         map.put("nameOfTheDestinationStation", splitNames[1]);
+
+
+
         map.put("stationList", stationService.getAllStationWithId());
         return "station";
     }
 
-    @RequestMapping("/create")
-    public String create(Model model) throws Exception {
-//        stationService.inputValues();
-//        Stations stations = new Stations();
+    @RequestMapping("/insertStationTable")
+    public String insertStationsTable(Model model) {
         stationService.add(new Stations(1, "Sloane Square"));
         stationService.add(new Stations(2, "St. James's Park"));
         stationService.add(new Stations(3, "Westminster"));
         stationService.add(new Stations(4, "Waterloo"));
         stationService.add(new Stations(5, "Southwark"));
         stationService.add(new Stations(6, "London Bridge Station"));
-        model.addAttribute("Hello", "Hello");
+        rolesService.add(new Roles(1, "ROLE_ADMIN"));
+        rolesService.add(new Roles(2, "ROLE_USER"));
+        scheduleService.add(new Schedule(1, "1", "Sloane Square", "9:00", 1, true));
+        scheduleService.add(new Schedule(2, "1", "St. James's Park", "9:10", 2, true));
+        scheduleService.add(new Schedule(3, "1", "Westminster", "9:20",  3, true));
+        scheduleService.add(new Schedule(5, "1", "Waterloo", "9:40", 4, true));
+        scheduleService.add(new Schedule(6, "1", "Southwark", "9:50", 5, true));
+        scheduleService.add(new Schedule(7, "1", "London Bridge Station", "10:00", 6, true));
+        scheduleService.add(new Schedule(8, "1", "London Bridge Station", "15:00", 6, false));
+        scheduleService.add(new Schedule(9, "1", "Southwark", "15:10", 5, false));
+        scheduleService.add(new Schedule(10, "1", "Waterloo", "15:20", 4, false));
+        scheduleService.add(new Schedule(12, "1", "Westminster", "15:40", 3, false));
+        scheduleService.add(new Schedule(13, "1", "St. James's Park", "15:50", 2, false));
+        scheduleService.add(new Schedule(14, "1", "Sloane Square", "16:00", 1, false));
         return "create";
     }
 }

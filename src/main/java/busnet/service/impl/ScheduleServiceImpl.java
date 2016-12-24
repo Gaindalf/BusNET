@@ -59,5 +59,28 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleDao.getAllStation();
     }
 
+    @Transactional
+    public List<Schedule> getAllByOne(){
+        return scheduleDao.getAllByOne();
+    }
 
+    @Transactional
+    public List<Schedule> getDirectionByStation(String station){
+        return scheduleDao.getDirectionByStation(station);
+    }
+
+    @Transactional
+    public Schedule getIdByName(String station){
+        return scheduleDao.getIdByName(station);
+    }
+
+    @Transactional
+    public int getStationNumber(String station){
+        return scheduleDao.getStationNumber(station);
+    }
+
+    @Transactional
+    public List getStationByStationAndDirection(int a, int b, boolean direction){
+        return scheduleDao.getStationByStationAndDirection(a,b, direction);
+    }
 }
