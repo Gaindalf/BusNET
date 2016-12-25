@@ -19,5 +19,6 @@ public interface ScheduleDao {
     public Schedule getIdByName(String station);
     public int getStationNumber(String station);
     public List getStationByStationAndDirection(int a, int b, boolean direction);
+    public int chooseRunNumber(String station, String time, boolean direction);
 
 }

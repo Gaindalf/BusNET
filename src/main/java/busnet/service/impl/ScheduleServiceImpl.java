@@ -83,4 +83,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     public List getStationByStationAndDirection(int a, int b, boolean direction){
         return scheduleDao.getStationByStationAndDirection(a,b, direction);
     }
+
+    @Transactional
+    public int chooseRunNumber(String station, String time, boolean direction){
+        return scheduleDao.chooseRunNumber(station, time, direction);
+    }
 }

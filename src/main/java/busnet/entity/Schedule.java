@@ -25,16 +25,20 @@ public class Schedule {
     @Column
     private boolean direction;
 
+    @Column
+    private int runnumber;
+
     public Schedule() {
     }
 
-    public Schedule(int id, String line, String station, String time, int stationnumber, boolean direction) {
+    public Schedule(int id, String line, String station, String time, int stationnumber, boolean direction, int runnumber) {
         this.id = id;
         this.line = line;
         this.station = station;
         this.time = time;
         this.stationnumber = stationnumber;
         this.direction = direction;
+        this.runnumber = runnumber;
     }
 
     public Schedule(int stationnumber) {
@@ -87,5 +91,13 @@ public class Schedule {
 
     public void setDirection(boolean direction) {
         this.direction = direction;
+    }
+
+    public int getRunnumber() {
+        return runnumber;
+    }
+
+    public void setRunnumber(int runnumber) {
+        this.runnumber = runnumber;
     }
 }

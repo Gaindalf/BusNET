@@ -63,6 +63,7 @@ public class ScheduleDaoImpl implements ScheduleDao{
             schedule.setTime(rs.getString("time"));
             schedule.setStationnumber(rs.getInt("stationnumber"));
             schedule.setDirection(rs.getBoolean("direction"));
+            schedule.setRunnumber(rs.getInt("runnumber"));
             return schedule;
         }
     };
@@ -138,5 +139,10 @@ public class ScheduleDaoImpl implements ScheduleDao{
     public List getStationByStationAndDirection(int a, int b, boolean direction){
         return session.getCurrentSession().createQuery("FROM Schedule WHERE direction = " + direction + " AND stationnumber BETWEEN " + a + " AND " + b).list();
 //        return jdbcTemplate.query("SELECT time FROM schedule WHERE  direction = ? AND stationnumber BETWEEN a AND b", rowMapperForTime, a, b, direction);
+    }
+
+    @Override
+    public int chooseRunNumber(String station, String time, boolean direction){
+        return jdbcTemplate.queryForObject("SELECT * FROM Schedule WHERE direction =? AND station =? AND time =?", rowMapper, direction, station, time).getRunnumber();
     }
 }

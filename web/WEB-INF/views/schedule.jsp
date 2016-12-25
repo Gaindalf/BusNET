@@ -35,6 +35,10 @@
             <td><form:input path="direction"/></td>
         </tr>
         <tr>
+            <td>Run Number</td>
+            <td><form:input path="runnumber"/></td>
+        </tr>
+        <tr>
             <td colspan="2">
                 <input type="submit" name="action" value="Add"/>
                 <input type="submit" name="action" value="Edit"/>
@@ -52,6 +56,7 @@
     <th>Time</th>
     <th>Station number</th>
     <th>Direction</th>
+    <th>Run Number</th>
     <c:forEach items="${scheduleList}" var="schedule">
         <tr>
             <td>${schedule.id}</td>
@@ -60,6 +65,7 @@
             <td>${schedule.time}</td>
             <td>${schedule.stationnumber}</td>
             <td>${schedule.direction}</td>
+            <td>${schedule.runnumber}</td>
         </tr>
     </c:forEach>
 </table>
