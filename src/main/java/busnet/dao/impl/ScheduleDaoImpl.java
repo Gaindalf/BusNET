@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Repository
-public class ScheduleDaoImpl implements ScheduleDao {
+public class ScheduleDaoImpl implements ScheduleDao{
 
     @Autowired
     private SessionFactory session;
@@ -45,7 +45,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
 
     @Override
     public Schedule getSchedule(int id) {
-        return (Schedule) session.getCurrentSession().get(Schedule.class, id);
+        return (Schedule)session.getCurrentSession().get(Schedule.class, id);
     }
 
     @Override
@@ -73,6 +73,24 @@ public class ScheduleDaoImpl implements ScheduleDao {
         public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
             Schedule schedule = new Schedule();
             schedule.setStation(rs.getString("station"));
+            return schedule;
+        }
+    };
+
+    private RowMapper<Schedule> rowMapperForStationNumber = new RowMapper<Schedule>() {
+        @Override
+        public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Schedule schedule = new Schedule();
+            schedule.setStationnumber(rs.getInt("stationnumber"));
+            return schedule;
+        }
+    };
+
+    private RowMapper<Schedule> rowMapperForTime = new RowMapper<Schedule>() {
+        @Override
+        public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Schedule schedule = new Schedule();
+            schedule.setTime(rs.getString("time"));
             return schedule;
         }
     };
@@ -107,24 +125,24 @@ public class ScheduleDaoImpl implements ScheduleDao {
         return jdbcTemplate.queryForObject("SELECT * FROM schedule WHERE station=? LIMIT 1", rowMapper, station);
     }
 
-    public int getStationNumber(String station) {
+    public int getStationNumber(String station){
         int a = getIdByName(station).getStationnumber();
         return a;
     }
 
     @Override
-    public List<Schedule> getAllStation() {
+    public List<Schedule> getAllStation(){
         return jdbcTemplate.query("SELECT * FROM schedule", rowMapper);
     }
 
     @Override
-    public List getStationByStationAndDirection(int a, int b, boolean direction) {
+    public List getStationByStationAndDirection(int a, int b, boolean direction){
         return session.getCurrentSession().createQuery("FROM Schedule WHERE direction = " + direction + " AND stationnumber BETWEEN " + a + " AND " + b).list();
 //        return jdbcTemplate.query("SELECT time FROM schedule WHERE  direction = ? AND stationnumber BETWEEN a AND b", rowMapperForTime, a, b, direction);
     }
 
     @Override
-    public int chooseRunNumber(String station, String time, boolean direction) {
+    public int chooseRunNumber(String station, String time, boolean direction){
         return jdbcTemplate.queryForObject("SELECT * FROM Schedule WHERE direction =? AND station =? AND time =?", rowMapper, direction, station, time).getRunnumber();
     }
 }
