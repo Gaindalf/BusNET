@@ -39,9 +39,6 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().formLogin().loginPage("/login").permitAll()
                 .defaultSuccessUrl("/", false)
                 .and().csrf().disable()
-//                .sessionManagement().maximumSessions(1).sessionRegistry(sessionRegistry())
-//                .and()
-//                .and()
                 .logout().logoutSuccessUrl("/").invalidateHttpSession(true).deleteCookies();
     }
 

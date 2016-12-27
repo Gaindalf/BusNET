@@ -19,17 +19,21 @@ public class AppController {
 
     @RequestMapping("/")
     public String hello(Model model) {
-        if(SecurityContextHolder.getContext().getAuthentication().getName().toString() != "anonymousUser") {
+        if(!SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString().equals("[ROLE_ANONYMOUS]")) {
             model.addAttribute("Login", ", " + SecurityContextHolder.getContext().getAuthentication().getName() + ".");
             model.addAttribute("Exit", "Выход");
-//            model.addAttribute("Name", registrationService.getUserName(SecurityContextHolder.getContext().getAuthentication().getName().toString()).toString());
-
+            model.addAttribute("Station", "Покупка билета");
+            if(SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString().equals("[ROLE_ADMIN]")){
+                model.addAttribute("Schedule", "Редактировать расписание и автобусы");
+                model.addAttribute("addStation", "<a href=\"/addStation\">Редактировать Станции</a><br>");
+            }
         } else{
             model.addAttribute("Login", ", Гость.");
             model.addAttribute("Registration", "Регистрация");
             model.addAttribute("Enter", "<a href=\"/login\">Войти<a/>");
         }
-        model.addAttribute("Schedule", "Расписание");
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString());
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
         return "hello";
     }
 

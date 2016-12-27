@@ -1,14 +1,9 @@
 package busnet.controller;
 
-import busnet.entity.Bus;
-import busnet.entity.Roles;
-import busnet.entity.Schedule;
-import busnet.entity.Stations;
-import busnet.service.BusService;
-import busnet.service.RolesService;
-import busnet.service.ScheduleService;
-import busnet.service.StationService;
+import busnet.entity.*;
+import busnet.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -41,13 +36,14 @@ public class ScheduleController {
     @Autowired
     private RolesService rolesService;
 
+    @Autowired
+    private UsersOnLineService usersOnLineService;
+
     @RequestMapping("/schedule")
     public String setupForm(Map<String, Object> map) {
         Schedule schedule = new Schedule();
         map.put("schedule", schedule);
         map.put("scheduleList", scheduleService.getAllSchedule());
-        map.put("scheduleList2", scheduleService.getAllByStation("St. James's Park"));
-        map.put("stationList", stationService.getAllStations());
 
         return "schedule";
     }
@@ -76,7 +72,6 @@ public class ScheduleController {
 
         map.put("schedule", scheduleResult);
         map.put("scheduleList", scheduleService.getAllSchedule());
-        map.put("scheduleList2", scheduleService.getAllByStation("St. James's Park"));
         return "schedule";
     }
 
@@ -86,7 +81,6 @@ public class ScheduleController {
         Bus bus = new Bus();
         map.put("bus", bus);
         map.put("station", stations);
-//        map.put("stationList", scheduleService.getAllByOne());
         map.put("stationList", stationService.getAllStationWithId());
         return "station";
     }
@@ -126,12 +120,7 @@ public class ScheduleController {
         map.put("tomorrow_2", format2.format(tomorrow_2));
         map.put("tomorrow_3", format2.format(tomorrow_3));
         map.put("nameOfTheDepartureStation", splitNames[0]);
-        map.put("scheduleList3", scheduleService.getAllByStation(splitNames[0]));
-        map.put("scheduleList4", scheduleService.getAllByStation(splitNames[1]));
-//        map.put("stationscheduleList", stationService.getStations())
         map.put("nameOfTheDestinationStation", splitNames[1]);
-
-
         map.put("stationList", stationService.getAllStationWithId());
         return "station";
     }
@@ -174,8 +163,6 @@ public class ScheduleController {
         newDate = date;
         map.put("YourChoiceDate", "Вы выбрали: <br>" + date);
         map.put("nameOfTheDepartureStation", splitNames[0]);
-        map.put("scheduleList3", scheduleService.getAllByStation(splitNames[0]));
-        map.put("scheduleList4", scheduleService.getAllByStation(splitNames[1]));
         map.put("nameOfTheDestinationStation", splitNames[1]);
         map.put("bus", bus);
         map.put("station", stations);
@@ -204,10 +191,18 @@ public class ScheduleController {
         }
         Date today = new Date();
         SimpleDateFormat format2 = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat format3 = new SimpleDateFormat("dd");
         Date tomorrow = new Date(today.getTime() + (24 * 60 * 60 * 1000));
         Date tomorrow_1 = new Date(tomorrow.getTime() + (24 * 60 * 60 * 1000));
         Date tomorrow_2 = new Date(tomorrow_1.getTime() + (24 * 60 * 60 * 1000));
         Date tomorrow_3 = new Date(tomorrow_2.getTime() + (24 * 60 * 60 * 1000));
+        String split[] = time.split(":");
+        String splitDate[] = newDate.split("-");
+        int day = Integer.parseInt(splitDate[0]);
+        int hour = Integer.parseInt(split[0]);
+        int min = Integer.parseInt(split[1]);
+        int format3ToInt = Integer.parseInt(format3.format(today));
+        Date scheduleTime = new Date((1000 * 60 * 60 * hour) + (1000 * (60 + 10) * min));
         map.put("ButtonTime", "<input type=\"submit\" name=\"action\" value=\"Выбрать\"/>");
         map.put("ButtonDate", "<input type=\"submit\" name=\"action\" value=\"Выбрать\"/>");
         map.put("bus", bus);
@@ -220,13 +215,23 @@ public class ScheduleController {
         System.out.println("Дата здесь : " + newDate);
         System.out.println("Время здесь : " + time);
         NewTime = time;
+        int runNumber = scheduleService.chooseRunNumber(splitNames[0], NewTime, direction);
+        System.out.println("false or true: " + usersOnLineService.getBoolean(newDate, runNumber, SecurityContextHolder.getContext().getAuthentication().getName()));
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
+        System.out.println("Time :" + scheduleTime.compareTo(today));
+        if (scheduleTime.compareTo(today) == 1 || day != format3ToInt) {
+            if (usersOnLineService.getBoolean(newDate, runNumber, SecurityContextHolder.getContext().getAuthentication().getName()) == true) {
+                map.put("BuyTicket", "<input type=\"submit\" name=\"action\" value=\"Оформить\"/>");
+                map.put("Buy", "Покупка:");
+            } else if (usersOnLineService.getBoolean(newDate, runNumber, SecurityContextHolder.getContext().getAuthentication().getName()) == false) {
+                map.put("AlreadyBuy", "Вы уже купили билет на данный маршрут<br>Выберите другую дату или время");
+            }
+        } else {
+            map.put("AlreadyBuy", "Билеты на выбранное время купить нельзя");
+        }
         map.put("YourChoiceDate", "Вы выбрали: <br>" + newDate);
         map.put("YourChoiceTime", "Вы выбрали: <br>" + time);
-        map.put("BuyTicket", "<input type=\"submit\" name=\"action\" value=\"Оформить\"/>");
-        map.put("Buy", "Покупка:");
         map.put("nameOfTheDepartureStation", splitNames[0]);
-        map.put("scheduleList3", scheduleService.getAllByStation(splitNames[0]));
-        map.put("scheduleList4", scheduleService.getAllByStation(splitNames[1]));
         map.put("nameOfTheDestinationStation", splitNames[1]);
         map.put("bus", bus);
         map.put("station", stations);
@@ -250,83 +255,19 @@ public class ScheduleController {
         int runNumber = scheduleService.chooseRunNumber(splitNames[0], NewTime, direction);
         int a = scheduleService.getStationNumber(splitNames[0]);
         int b = scheduleService.getStationNumber(splitNames[1]);
-        int one = busService.chooseRunNumber(newDate, runNumber).getOne();
-        int two = busService.chooseRunNumber(newDate, runNumber).getTwo();
-        int three = busService.chooseRunNumber(newDate, runNumber).getThree();
-        int four = busService.chooseRunNumber(newDate, runNumber).getFour();
-        int five = busService.chooseRunNumber(newDate, runNumber).getFive();
-        int six = busService.chooseRunNumber(newDate, runNumber).getSix();
+        int umberOfPassengers = busService.chooseRunNumber(newDate, runNumber).getNumberOfPassengers();
         int id = busService.chooseRunNumber(newDate, runNumber).getId();
         String selectdate = busService.chooseRunNumber(newDate, runNumber).getDate();
         String selecttime = busService.chooseRunNumber(newDate, runNumber).getTime();
         int selectRunNumber = busService.chooseRunNumber(newDate, runNumber).getRunnumber();
-        if (one < 30 && two < 30 && three < 30 && four < 30 && five < 30 && six < 30) {
-            if (a < b) {
-                for (int i = a; i < b; i++) {
-                    if (i == 1) {
-                        if (one < 30) {
-                            one++;
-                        }
-
-                    } else if (i == 2) {
-                        if (two < 30) {
-                            two++;
-                        }
-                    } else if (i == 3) {
-                        if (three < 30) {
-                            three++;
-                        }
-                    } else if (i == 4) {
-                        if (four < 30) {
-                            four++;
-                        }
-                    } else if (i == 5) {
-                        if (five < 30) {
-                            five++;
-                        }
-                    } else if (i == 6) {
-                        if (six < 30) {
-                            six++;
-                        }
-                    }
-                    busService.edit(new Bus(id, selectdate, selecttime, selectRunNumber, one, two, three, four, five, six));
-                    map.put("OK", "Вы купили билет");
-                }
-            } else if (a > b) {
-                for (int i = a; i > b; i--) {
-                    if (i == 1) {
-                        if (one < 30) {
-                            one++;
-                        }
-                    } else if (i == 2) {
-                        if (two < 30) {
-                            two++;
-                        }
-                    } else if (i == 3) {
-                        if (three < 30) {
-                            three++;
-                        }
-                    } else if (i == 4) {
-                        if (four < 30) {
-                            four++;
-                        }
-                    } else if (i == 5) {
-                        if (five < 30) {
-                            five++;
-                        }
-                    } else if (i == 6) {
-                        if (six < 30) {
-                            six++;
-                        }
-                    }
-                }
-                busService.edit(new Bus(id, selectdate, selecttime, selectRunNumber, one, two, three, four, five, six));
+        if (umberOfPassengers < 30) {
+                umberOfPassengers++;
+                busService.edit(new Bus(id, selectdate, selecttime, selectRunNumber, umberOfPassengers));
+                usersOnLineService.add(new UsersOnLine(SecurityContextHolder.getContext().getAuthentication().getName(), newDate, runNumber));
                 map.put("OK", "Вы купили билет");
-            }
         }else{
-            map.put("OK", "билетов на данный маршрут больше нет");
+            map.put("NotOK", "Билетов на данный маршрут больше нет");
         }
-
         map.put("nameOfTheDepartureStation", splitNames[0]);
         map.put("nameOfTheDestinationStation", splitNames[1]);
         map.put("Date", newDate);
@@ -350,26 +291,26 @@ public class ScheduleController {
         stationService.add(new Stations(6, "London Bridge Station"));
         rolesService.add(new Roles(1, "ROLE_ADMIN"));
         rolesService.add(new Roles(2, "ROLE_USER"));
-        busService.add(new Bus(1, "" + format.format(today) + "", "9:00", 1, 0, 0, 30, 0, 0, 0));
-        busService.add(new Bus(1, "" + format.format(today) + "", "15:00", 2, 0, 0, 0, 0, 0, 0));
-        busService.add(new Bus(1, "" + format.format(today) + "", "12:00", 3, 0, 0, 0, 0, 0, 0));
-        busService.add(new Bus(1, "" + format.format(today) + "", "18:00", 4, 0, 0, 0, 0, 0, 0));
-        busService.add(new Bus(1, "" + format.format(tomorrow) + "", "9:00", 1, 0, 0, 0, 0, 0, 0));
-        busService.add(new Bus(1, "" + format.format(tomorrow) + "", "15:00", 2, 0, 0, 0, 0, 0, 0));
-        busService.add(new Bus(1, "" + format.format(tomorrow) + "", "12:00", 3, 0, 0, 0, 0, 0, 0));
-        busService.add(new Bus(1, "" + format.format(tomorrow) + "", "18:00", 4, 0, 0, 0, 0, 0, 0));
-        busService.add(new Bus(1, "" + format.format(tomorrow_1) + "", "9:00", 1, 0, 0, 0, 0, 0, 0));
-        busService.add(new Bus(1, "" + format.format(tomorrow_1) + "", "15:00", 2, 0, 0, 0, 0, 0, 0));
-        busService.add(new Bus(1, "" + format.format(tomorrow_1) + "", "12:00", 3, 0, 0, 0, 0, 0, 0));
-        busService.add(new Bus(1, "" + format.format(tomorrow_1) + "", "18:00", 4, 0, 0, 0, 0, 0, 0));
-        busService.add(new Bus(1, "" + format.format(tomorrow_2) + "", "9:00", 1, 0, 0, 0, 0, 0, 0));
-        busService.add(new Bus(1, "" + format.format(tomorrow_2) + "", "15:00", 2, 0, 0, 0, 0, 0, 0));
-        busService.add(new Bus(1, "" + format.format(tomorrow_2) + "", "12:00", 3, 0, 0, 0, 0, 0, 0));
-        busService.add(new Bus(1, "" + format.format(tomorrow_2) + "", "18:00", 4, 0, 0, 0, 0, 0, 0));
-        busService.add(new Bus(1, "" + format.format(tomorrow_3) + "", "9:00", 1, 0, 0, 0, 0, 0, 0));
-        busService.add(new Bus(1, "" + format.format(tomorrow_3) + "", "15:00", 2, 0, 0, 0, 0, 0, 0));
-        busService.add(new Bus(1, "" + format.format(tomorrow_3) + "", "12:00", 3, 0, 0, 0, 0, 0, 0));
-        busService.add(new Bus(1, "" + format.format(tomorrow_3) + "", "18:00", 4, 0, 0, 0, 0, 0, 0));
+        busService.add(new Bus(1, "" + format.format(today) + "", "9:00", 1, 30));
+        busService.add(new Bus(1, "" + format.format(today) + "", "15:00", 2, 0));
+        busService.add(new Bus(1, "" + format.format(today) + "", "12:00", 3, 0));
+        busService.add(new Bus(1, "" + format.format(today) + "", "18:00", 4, 0));
+        busService.add(new Bus(1, "" + format.format(tomorrow) + "", "9:00", 1, 30));
+        busService.add(new Bus(1, "" + format.format(tomorrow) + "", "15:00", 2, 0));
+        busService.add(new Bus(1, "" + format.format(tomorrow) + "", "12:00", 3, 0));
+        busService.add(new Bus(1, "" + format.format(tomorrow) + "", "18:00", 4, 0));
+        busService.add(new Bus(1, "" + format.format(tomorrow_1) + "", "9:00", 1, 0));
+        busService.add(new Bus(1, "" + format.format(tomorrow_1) + "", "15:00", 2, 0));
+        busService.add(new Bus(1, "" + format.format(tomorrow_1) + "", "12:00", 3, 0));
+        busService.add(new Bus(1, "" + format.format(tomorrow_1) + "", "18:00", 4, 0));
+        busService.add(new Bus(1, "" + format.format(tomorrow_2) + "", "9:00", 1, 0));
+        busService.add(new Bus(1, "" + format.format(tomorrow_2) + "", "15:00", 2, 0));
+        busService.add(new Bus(1, "" + format.format(tomorrow_2) + "", "12:00", 3, 0));
+        busService.add(new Bus(1, "" + format.format(tomorrow_2) + "", "18:00", 4, 0));
+        busService.add(new Bus(1, "" + format.format(tomorrow_3) + "", "9:00", 1, 0));
+        busService.add(new Bus(1, "" + format.format(tomorrow_3) + "", "15:00", 2, 0));
+        busService.add(new Bus(1, "" + format.format(tomorrow_3) + "", "12:00", 3, 0));
+        busService.add(new Bus(1, "" + format.format(tomorrow_3) + "", "18:00", 4, 0));
         scheduleService.add(new Schedule(1, "1", "Sloane Square", "9:00", 1, true, 1));
         scheduleService.add(new Schedule(2, "1", "St. James's Park", "9:10", 2, true, 1));
         scheduleService.add(new Schedule(3, "1", "Westminster", "9:20", 3, true, 1));
