@@ -18,7 +18,7 @@ public class Users {
     @Column
     private int role_id = 2;
     @Column
-    private String mail;
+    private  String mail;
     @Column
     private String name;
     @Column

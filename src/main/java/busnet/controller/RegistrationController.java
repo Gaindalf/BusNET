@@ -34,6 +34,18 @@ public class RegistrationController {
                 registrationService.add(users);
                 usersResult = users;
                 break;
+//            case "edit":
+//                registrationService.edit(users);
+//                usersResult = users;
+//                break;
+//            case "delete":
+//                registrationService.delete(users.getId());
+//                usersResult = new Users();
+//                break;
+//            case "search":
+//                Users searchedUser = registrationService.getUser(users.getId());
+//                usersResult = searchedUser != null ? searchedUser : new Users();
+//                break;
         }
 
         map.put("users", usersResult);
