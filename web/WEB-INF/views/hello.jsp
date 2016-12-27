@@ -10,8 +10,8 @@
 <a href="/reg">${Registration}</a><br>
 ${Enter}<br>
 <a href="/schedule">${Schedule}</a><br>
-<a href="/station">Станции</a><br>
-<a href="/route">Путь</a><br>
+${addStation}
+<a href="/station">${Station}</a><br>
 <a href="/insertStationTable">Заполнение таблиц базы данных</a><br><br><br>
 
 Инструкция:<br>
